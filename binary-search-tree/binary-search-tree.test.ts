@@ -23,4 +23,41 @@ describe('Проверка методов работы Binary Search Tree', () =
         expect(binarySearchTree.search(binarySearchTree.root, 15)).toBeFalsy();
         expect(binarySearchTree.search(binarySearchTree.root, 55)).toBeTruthy();
     });
+
+    test('Проверка метода levelOrder', () => {
+        binarySearchTree.insert(10);
+        binarySearchTree.insert(5);
+        binarySearchTree.insert(15);
+        binarySearchTree.insert(3);
+        binarySearchTree.insert(7);
+        binarySearchTree.levelOrder();
+    });
+
+    test('Проверка метода min', () => {
+        binarySearchTree.insert(10);
+        binarySearchTree.insert(5);
+        binarySearchTree.insert(15);
+        binarySearchTree.insert(3);
+        binarySearchTree.insert(7);
+        expect(binarySearchTree.min(binarySearchTree.root)).toBe(3);
+    });
+    test('Проверка метода max', () => {
+        binarySearchTree.insert(10);
+        binarySearchTree.insert(5);
+        binarySearchTree.insert(15);
+        binarySearchTree.insert(3);
+        binarySearchTree.insert(7);
+        expect(binarySearchTree.max(binarySearchTree.root)).toBe(15);
+    });
+
+    test('Проверка метода Delete', () => {
+        binarySearchTree.insert(10);
+        binarySearchTree.insert(5);
+        binarySearchTree.insert(15);
+        binarySearchTree.insert(3);
+        binarySearchTree.insert(7);
+
+        binarySearchTree.delete(10);
+        binarySearchTree.levelOrder();
+    });
 });

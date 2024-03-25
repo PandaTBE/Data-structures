@@ -41,6 +41,30 @@ export interface IBinarySearchTree {
      * для дерева в котором по порядку вставлялись элементы (10, 5, 15, 3, 7) вывод будет 3, 7, 5, 15, 10
      */
     postOrder(root: IBinarySearchTreeNode | null): void;
+    /**
+     * Один из способов обхода дерева в ширину (BFS)
+     * для дерева в котором по порядку вставлялись элементы (10, 5, 15, 3, 7) вывод будет 10, 5, 15, 3, 7
+     */
+    levelOrder(): void;
+    /**
+     * Метод возвращает минимальное значение дерева (крайний левый узел)
+     */
+    min(root: IBinarySearchTreeNode | null): TValue | null;
+    /**
+     * Метод возвращает максимальное значение дерева (крайний правый узел)
+     */
+    max(root: IBinarySearchTreeNode | null): TValue | null;
+    /**
+     * Метод для удаления узла по переданному значению
+     */
+    delete(value: TValue): void;
+    /**
+     * Метод для удаления ноды из дерева или поддерева
+     */
+    deleteNode(
+        root: IBinarySearchTreeNode | null,
+        value: TValue,
+    ): IBinarySearchTreeNode | null;
 }
 
 export class BinarySearchTree implements IBinarySearchTree {
@@ -116,5 +140,65 @@ export class BinarySearchTree implements IBinarySearchTree {
             this.postOrder(root.right);
             console.log(root.value);
         }
+    }
+    levelOrder(): void {
+        /** Для оптимизации можно использовать структуру данных очередь */
+        const queue: IBinarySearchTreeNode[] = [];
+        if (this.root) {
+            queue.push(this.root);
+        }
+        while (queue.length) {
+            const current = queue.shift();
+            console.log(current?.value);
+
+            if (current?.left) {
+                queue.push(current.left);
+            }
+            if (current?.right) {
+                queue.push(current.right);
+            }
+        }
+    }
+    min(root: IBinarySearchTreeNode | null): TValue | null {
+        if (!root) return null;
+        if (!root.left) {
+            return root.value;
+        } else {
+            return this.min(root.left);
+        }
+    }
+    max(root: IBinarySearchTreeNode | null): TValue | null {
+        if (!root) return null;
+        if (!root.right) {
+            return root.value;
+        } else {
+            return this.max(root.right);
+        }
+    }
+    delete(value: TValue) {
+        this.root = this.deleteNode(this.root, value);
+    }
+
+    deleteNode(root: IBinarySearchTreeNode | null, value: TValue) {
+        if (root === null) {
+            return root;
+        }
+        if (value < root.value) {
+            root.left = this.deleteNode(root.left, value);
+        } else if (value > root.value) {
+            root.right = this.deleteNode(root.right, value);
+        } else {
+            if (!root.left && !root.right) {
+                return null;
+            }
+            if (!root.left) {
+                return root.right;
+            } else if (!root.right) {
+                return root.left;
+            }
+            root.value = this.min(root.right) as TValue;
+            root.right = this.deleteNode(root.right, root.value);
+        }
+        return root;
     }
 }
